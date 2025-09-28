@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import Category, Product
+from src.classes import Category, Product
 
 
 @pytest.fixture
@@ -25,3 +25,18 @@ def test_categories() -> None:
     assert category1.description.startswith("Смартфоны, ")
     assert category1.category_count == 1
     assert category1.product_count == 3
+
+
+def test_new_product() -> None:
+    new_product = Product.new_product(
+        {
+            "name": "Samsung Galaxy S23 Ultra",
+            "description": "256GB, Серый цвет, 200MP камера",
+            "price": 180000.0,
+            "quantity": 5,
+        }
+    )
+    assert new_product.name == "Samsung Galaxy S23 Ultra"
+    assert new_product.description.startswith("256GB")
+    assert new_product.price == 180000.0
+    assert new_product.quantity == 5
