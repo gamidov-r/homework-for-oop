@@ -61,8 +61,10 @@ class Category:
         Category.product_count += len(products)
 
     def add_product(self, product: Product) -> None:
-        self.__products.append(product)
-        Category.category_count += 1
+        if isinstance(product, Product):
+            if product.name not in self.__products:
+                self.__products.append(product)
+                Category.category_count += 1
 
     @property
     def products(self) -> None:
