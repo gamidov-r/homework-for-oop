@@ -78,5 +78,7 @@ class Category:
 
     @property
     def products(self) -> None:
+        result = ""
         for item in self.__products:
-            print("{}, {} руб. Остаток: {} шт.\n".format(item.name, item.price, item.quantity))
+            result += "{}, {} руб. Остаток: {} шт.\n".format(item.name, item.price, item.quantity)
+        return result
