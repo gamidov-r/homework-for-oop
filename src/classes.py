@@ -15,6 +15,12 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self) -> str:
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        return self.quantity * self.price + other.quantity * other.price
+
     @property
     def price(self) -> float:
         return self.__price
@@ -27,7 +33,7 @@ class Product:
             pass
         elif self.__price > price > 0:
             if input("submit new price? ") == "y":
-            # if "y" == "y":
+                # if "y" == "y":
                 self.__price = price
         elif price > self.__price:
             self.__price = price
@@ -59,6 +65,10 @@ class Category:
         self.__products = products
         Category.category_count += 1
         Category.product_count += len(products)
+
+    def __str__(self) -> str:
+        # return "ok"
+        return f"{self.name}, количество продуктов: {len(str(self.__products))} шт."
 
     def add_product(self, product: Product) -> None:
         if isinstance(product, Product):

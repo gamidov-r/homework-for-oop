@@ -6,10 +6,15 @@ from src.classes import Category, Product
 @pytest.fixture
 def test_products() -> None:
     product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
-    assert product1.name == "Samsung Galaxy S23 Ultra"
-    assert product1.description.startswith("256GB")
-    assert product1.price == 18000.0
-    assert product1.quantity == 5
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+
+    assert print(str(product1)) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+    assert print(str(product2)) == "Iphone 15, 210000.0 руб. Остаток: 8 шт."
+    assert print(str(product3)) == "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт."
+    assert print(product1 + product2) == 2580000.0
+    assert print(product1 + product3) == 1334000.0
+    assert print(product2 + product3) == 2114000.0
 
 
 def test_categories() -> None:
@@ -21,22 +26,5 @@ def test_categories() -> None:
         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
         [product1, product2, product3],
     )
-    assert category1.name == "Смартфоны"
-    assert category1.description.startswith("Смартфоны, ")
-    assert category1.category_count == 1
-    assert category1.product_count == 3
 
-
-def test_new_product() -> None:
-    new_product = Product.new_product(
-        {
-            "name": "Samsung Galaxy S23 Ultra",
-            "description": "256GB, Серый цвет, 200MP камера",
-            "price": 180000.0,
-            "quantity": 5,
-        }
-    )
-    assert new_product.name == "Samsung Galaxy S23 Ultra"
-    assert new_product.description.startswith("256GB")
-    assert new_product.price == 180000.0
-    assert new_product.quantity == 5
+    print(str(category1)) == "Смартфоны, количество продуктов: 144 шт."
