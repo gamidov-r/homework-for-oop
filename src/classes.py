@@ -18,8 +18,11 @@ class Product:
     def __str__(self) -> str:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other):
-        return self.quantity * self.price + other.quantity * other.price
+    def __add__(self, other: str):
+        if isinstance(other, Product):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            return TypeError
 
     @property
     def price(self) -> float:
@@ -43,9 +46,12 @@ class Product:
             # print("Цена не должна быть нулевая или отрицательная")
             sys.stdout.write("Цена не должна быть нулевая или отрицательная\n")
 
+
+
     @classmethod
     def new_product(cls, product: dict) -> "Product":
         return cls(product["name"], product["description"], product["price"], product["quantity"])
+
 
 
 class Category:
@@ -70,11 +76,13 @@ class Category:
         # return "ok"
         return f"{self.name}, количество продуктов: {len(str(self.__products))} шт."
 
-    def add_product(self, product: Product) -> None:
+    def add_product(self, product) -> None:
         if isinstance(product, Product):
             if product.name not in self.__products:
                 self.__products.append(product)
                 Category.category_count += 1
+        else:
+            raise TypeError
 
     @property
     def products(self) -> None:
@@ -82,3 +90,37 @@ class Category:
         for item in self.__products:
             result += "{}, {} руб. Остаток: {} шт.\n".format(item.name, item.price, item.quantity)
         return result
+
+
+class Smartphone(Product):
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color) -> None:
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __add__(self, other):
+        # if isinstance(other, Smartphone):
+        if issubclass(type(other), Smartphone):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            raise TypeError
+
+
+
+
+class LawnGrass(Product):
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __add__(self, other):
+        if isinstance(other, LawnGrass):
+        # if issubclass(type(other), Smartphone):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            raise TypeError
+
