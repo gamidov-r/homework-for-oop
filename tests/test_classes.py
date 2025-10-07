@@ -82,4 +82,4 @@ def test_str():
     smartphone2 = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space")
 
     category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны", [smartphone1, smartphone2])
-    assert str(category_smartphones) == "Смартфоны, количество продуктов: 102 шт."
+    assert str(category_smartphones) == "Смартфоны, количество продуктов: 6 шт."

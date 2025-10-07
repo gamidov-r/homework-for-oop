@@ -74,7 +74,7 @@ class Category:
 
     def __str__(self) -> str:
         # return "ok"
-        return f"{self.name}, количество продуктов: {len(str(self.__products))} шт."
+        return f"{self.name}, количество продуктов: {str(self.product_count)} шт."
 
     def add_product(self, product) -> None:
         if isinstance(product, Product):
