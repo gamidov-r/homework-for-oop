@@ -1,8 +1,35 @@
 import sys
+from abc import ABC, abstractmethod
 
 
-class Product:
+class BaseProduct(ABC):
+    """Абстрактный класс для класса Product"""
+
+    @abstractmethod
+    def __init__(self, name, description, price, quantity):
+        self.name = name
+        self.description = description
+        self.__price = price
+        self.quantity = quantity
+
+
+class ProductInfo:
+    """Вывод информации о продукте"""
+
+    __slots__ = ("name", "description", "price", "quantity")
+
+    def __init__(self, name, description, price, quantity):
+        self.name = name
+        self.description = description
+        self.price = price
+        self.quantity = quantity
+        sys.stdout.write(f"{self.__class__.__bases__}\n")
+
+
+class Product(ProductInfo, BaseProduct):
     """класс, описывающий продукты"""
+
+    __slots__ = ("name", "description", "quantity")
 
     name: str
     description: str
@@ -14,6 +41,7 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__(name, description, price, quantity)
 
     def __str__(self) -> str:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
@@ -46,12 +74,9 @@ class Product:
             # print("Цена не должна быть нулевая или отрицательная")
             sys.stdout.write("Цена не должна быть нулевая или отрицательная\n")
 
-
-
     @classmethod
     def new_product(cls, product: dict) -> "Product":
         return cls(product["name"], product["description"], product["price"], product["quantity"])
-
 
 
 class Category:
@@ -108,8 +133,6 @@ class Smartphone(Product):
             raise TypeError
 
 
-
-
 class LawnGrass(Product):
     def __init__(self, name, description, price, quantity, country, germination_period, color):
         super().__init__(name, description, price, quantity)
@@ -119,8 +142,7 @@ class LawnGrass(Product):
 
     def __add__(self, other):
         if isinstance(other, LawnGrass):
-        # if issubclass(type(other), Smartphone):
+            # if issubclass(type(other), Smartphone):
             return self.quantity * self.price + other.quantity * other.price
         else:
             raise TypeError
-
