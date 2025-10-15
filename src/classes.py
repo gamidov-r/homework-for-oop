@@ -6,12 +6,15 @@ class BaseProduct(ABC):
     """Абстрактный класс для класса Product"""
 
     @abstractmethod
-    def __init__(self, name, description, price, quantity):
-        self.name = name
-        self.description = description
-        self.__price = price
-        self.quantity = quantity
 
+    def __init__(self):
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+    def __add__(self):
+        pass
 
 class ProductInfo:
     """Вывод информации о продукте"""
@@ -23,13 +26,16 @@ class ProductInfo:
         self.description = description
         self.price = price
         self.quantity = quantity
-        sys.stdout.write(f"{self.__class__.__bases__}\n")
+        sys.stdout.write(f"{self.__repr__()}\n")
+        # def __repr__(self):
+        #     return self.__dict__
+            # return f"{self.__class__.__bases__}"
 
 
 class Product(ProductInfo, BaseProduct):
     """класс, описывающий продукты"""
 
-    __slots__ = ("name", "description", "quantity")
+    __slots__ = ("name", "description", "quantity", "__price")
 
     name: str
     description: str
