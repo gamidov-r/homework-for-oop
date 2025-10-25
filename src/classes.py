@@ -1,8 +1,41 @@
 import sys
+from abc import ABC, abstractmethod
 
 
-class Product:
+class BaseProduct(ABC):
+    """Абстрактный класс для класса Product"""
+
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+    def __add__(self):
+        pass
+
+
+class ProductInfo:
+    """Вывод информации о продукте"""
+
+    __slots__ = ("name", "description", "price", "quantity")
+
+    def __init__(self, name, description, price, quantity):
+        self.name = name
+        self.description = description
+        self.price = price
+        self.quantity = quantity
+        sys.stdout.write(f"{self.__repr__()}\n")
+        # def __repr__(self):
+        #     return self.__dict__
+        #     return f"{self.__class__.__bases__}"
+
+
+class Product(ProductInfo, BaseProduct):
     """класс, описывающий продукты"""
+
+    __slots__ = ("name", "description", "quantity", "__price")
 
     name: str
     description: str
@@ -10,16 +43,22 @@ class Product:
     quantity: float
 
     def __init__(self, name: str, description: str, price: float, quantity: float):
+        if quantity < 1:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__(name, description, price, quantity)
 
     def __str__(self) -> str:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other):
-        return self.quantity * self.price + other.quantity * other.price
+    def __add__(self, other: str):
+        if isinstance(other, Product):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            return TypeError
 
     @property
     def price(self) -> float:
@@ -68,15 +107,59 @@ class Category:
 
     def __str__(self) -> str:
         # return "ok"
-        return f"{self.name}, количество продуктов: {len(str(self.__products))} шт."
+        return f"{self.name}, количество продуктов: {str(self.product_count)} шт."
 
-    def add_product(self, product: Product) -> None:
+    def middle_price(self):
+        try:
+            count = len(self.__products)
+            avg_price = self.__products[0].price / count
+        except IndexError:
+            avg_price = 0
+        finally:
+            return avg_price
+
+    def add_product(self, product) -> None:
         if isinstance(product, Product):
             if product.name not in self.__products:
                 self.__products.append(product)
                 Category.category_count += 1
+        else:
+            raise TypeError
 
     @property
     def products(self) -> None:
+        result = ""
         for item in self.__products:
-            print("{}, {} руб. Остаток: {} шт.\n".format(item.name, item.price, item.quantity))
+            result += "{}, {} руб. Остаток: {} шт.\n".format(item.name, item.price, item.quantity)
+        return result
+
+
+class Smartphone(Product):
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color) -> None:
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __add__(self, other):
+        # if isinstance(other, Smartphone):
+        if issubclass(type(other), Smartphone):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            raise TypeError
+
+
+class LawnGrass(Product):
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __add__(self, other):
+        if isinstance(other, LawnGrass):
+            # if issubclass(type(other), Smartphone):
+            return self.quantity * self.price + other.quantity * other.price
+        else:
+            raise TypeError
