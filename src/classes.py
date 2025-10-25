@@ -6,7 +6,6 @@ class BaseProduct(ABC):
     """Абстрактный класс для класса Product"""
 
     @abstractmethod
-
     def __init__(self):
         pass
 
@@ -15,6 +14,7 @@ class BaseProduct(ABC):
 
     def __add__(self):
         pass
+
 
 class ProductInfo:
     """Вывод информации о продукте"""
@@ -29,7 +29,7 @@ class ProductInfo:
         sys.stdout.write(f"{self.__repr__()}\n")
         # def __repr__(self):
         #     return self.__dict__
-            # return f"{self.__class__.__bases__}"
+        #     return f"{self.__class__.__bases__}"
 
 
 class Product(ProductInfo, BaseProduct):
@@ -43,6 +43,8 @@ class Product(ProductInfo, BaseProduct):
     quantity: float
 
     def __init__(self, name: str, description: str, price: float, quantity: float):
+        if quantity < 1:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         self.name = name
         self.description = description
         self.__price = price
@@ -106,6 +108,15 @@ class Category:
     def __str__(self) -> str:
         # return "ok"
         return f"{self.name}, количество продуктов: {str(self.product_count)} шт."
+
+    def middle_price(self):
+        try:
+            count = len(self.__products)
+            avg_price = self.__products[0].price / count
+        except IndexError:
+            avg_price = 0
+        finally:
+            return avg_price
 
     def add_product(self, product) -> None:
         if isinstance(product, Product):
